@@ -1,6 +1,7 @@
 # ⚠️ Prérequis :
-avoit git 
-et un compilateur g++ : https://github.com/brechtsanders/winlibs_mingw/releases/download/15.2.0posix-13.0.0-ucrt-r5/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r5.zip
+- avoit git 
+- et un compilateur g++ : https://github.com/brechtsanders/winlibs_mingw/releases/download/15.2.0posix-13.0.0-ucrt-r5/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r5.zip
+  https://www.youtube.com/watch?v=y-i96kqT53A
 
 
 ## Pour lancer le projet avec clion : 
