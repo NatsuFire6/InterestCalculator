@@ -13,7 +13,6 @@ class Pret {
 
         void PretByPaid(double monthPaid);
         void PretByMonth(int monthOfSimulation);
-        void PretDefered(int monthOfDefered);
         std::string Info();
 
 

@@ -1,7 +1,6 @@
 #include "Pret.hpp"
 #include "Invest.h"
 
-#include <cmath>
 #include <fstream>
 #include <iostream>
 using namespace std;
@@ -19,6 +18,8 @@ void investWithPret() {
     double gainsWithoutPret = 0;
     double personalInvest;
     bool flatTax;
+    bool totalDefered;
+    int monthOfDeferred = 0;
 
     double monthPaid;
     double tauxPret;
@@ -51,7 +52,7 @@ void investWithPret() {
     cin >> invest;
     r = "";
     do {
-        cout << "Entree le montant que vous voulez rembourser par mois :\n 1. uniquement les interet generer\n 2. les interets generer + un montant\n 3. un montant ";
+        cout << "Entree le montant que vous voulez rembourser par mois :\n 1. uniquement les interet generer (a partir du premier mois ou vous commencer a rembourser)\n 2. les interets generer + un montant\n 3. un montant ";
         cin >> r;
     }while(r != "1" && r != "2" && r != "3");
     if (r == "1") {
@@ -68,36 +69,71 @@ void investWithPret() {
             cout << "Entree le montant que vous voulez rembourser" << endl;
             cin >> refund;
         }while (refund <= pret + (pret*(tauxPret/100.0)));
-    } 
+    }
+    do {
+        cout << "Voulez vous rembourser le pret en diferer ? (o/n)" << endl;
+        cin >> r;
+    }while(r != "n" && r != "o");
+    if (r == "o") {
+        cout << "Entrer le nombre de mois de diferer : " << endl;
+        cin >> monthOfDeferred;
+        do {
+            cout << "Diferer total (vous ne rembourser rien du tout avant la fin du deferer mais les interets sont capitalisant)? (o/n)" << endl;
+            cin >> r;
+        }while(r != "n" && r != "o");
+        if (r == "n") {
+            totalDefered = false;
+        }else {
+            totalDefered = true;
+        }
+    }
 
     allCapitalWithPret = personalInvest + pret;
     allCapitalWithoutPret = personalInvest;
-    restToPaid = pret + (pret*(tauxPret/100.0));
+    restToPaid = pret + (pret*(tauxPret/100.0/12));
     refundGenerer ? monthPaid = refund + (allCapitalWithPret*(tauxInv/100.0))/12 : monthPaid = refund;;
     if (flatTax) monthPaid *= 0.7;
     int totalMonth = 0;
+    bool firstPaid = true;
+
     for (int i = 1; restToPaid > 0; i++) {
         totalMonth = i;
-
-        restToPaid += restToPaid * ( (tauxPret/100.0) /12 );
-        monthPaid = std::min(monthPaid, restToPaid);
-        restToPaid -= monthPaid;
-        totalPaid += monthPaid;
 
         monthResultWithPret = allCapitalWithPret * (tauxInv / 100.0 / 12);
         if (flatTax) monthResultWithPret *= 0.7;
         allCapitalWithPret += monthResultWithPret;
         gainsWithPret += monthResultWithPret;
-        allCapitalWithPret -= monthPaid;
+
+        if (i <= monthOfDeferred) {
+            monthPaid = 0;
+            if (totalDefered) {
+                restToPaid += restToPaid * (tauxPret/100.0/12);
+            } else {
+                totalPaid += restToPaid * (tauxPret/100.0/12);
+            }
+        }else {
+            if (firstPaid) {
+                refundGenerer ? monthPaid = refund + (allCapitalWithPret*(tauxInv/100.0))/12 : monthPaid = refund;;
+                if (flatTax) monthPaid *= 0.7;
+                firstPaid = false;
+            }
+
+            restToPaid += restToPaid * (tauxPret/100.0/12);
+            monthPaid = std::min(monthPaid, restToPaid);
+            restToPaid -= monthPaid;
+            totalPaid += monthPaid;
+
+            allCapitalWithPret -= monthPaid;
+        }
 
         monthResultWithoutPret = allCapitalWithoutPret * (tauxInv / 100.0 / 12);
         if (flatTax) monthResultWithoutPret *= 0.7;
         allCapitalWithoutPret += monthResultWithoutPret;
         gainsWithoutPret += monthResultWithoutPret;
 
-        cout << "SANS PRET : Vous aurez "<< allCapitalWithoutPret << " au bout de "<< i/12 <<" annees et " << i%12 << " mois\nSoit " << personalInvest << " donnee de votre poche et " << gainsWithoutPret << " d'argent generer, dont " << monthResultWithoutPret << " ce mois !"  << endl;
-        cout << "AVEC PRET : Vous aurez "<< allCapitalWithPret << " au bout de "<< i/12 <<" annees et " << i%12 << " mois\nSoit " << personalInvest << " donnee de votre poche et " << gainsWithPret << " d'argent generer, dont " << monthResultWithPret << " ce mois !"  << endl;
-        cout << "AVEC PRET : Vous aurez payez "<< totalPaid << " au bout de "<< i/12 <<" annees et " << i%12 << " mois, dont " << monthPaid << " ce mois !\nIl ne vous reste plus que " << restToPaid << " a payer !\n" << endl;
+        cout << "SANS PRET : Vous aurez "<< allCapitalWithoutPret << " au bout de "<< i/12 <<" annees et " << i%12 << " mois. Soit " << personalInvest << " donnee de votre poche et " << gainsWithoutPret << " d'argent generer, dont " << monthResultWithoutPret << " ce mois !"  << endl;
+        cout << "AVEC PRET : Vous aurez "<< allCapitalWithPret << " au bout de "<< i/12 <<" annees et " << i%12 << " mois. Soit " << personalInvest << " donnee de votre poche et " << gainsWithPret << " d'argent generer, dont " << monthResultWithPret << " ce mois !"  << endl;
+        cout << "AVEC PRET : Vous aurez payez "<< totalPaid << " au bout de "<< i/12 <<" annees et " << i%12 << " mois, dont " << monthPaid << " ce mois ! Il vous reste " << restToPaid << " a payer !\n" << endl;
 
         personalInvest += invest;
         allCapitalWithPret += invest;
@@ -105,118 +141,116 @@ void investWithPret() {
     }
 
     cout << "A la fin du remboursement du pret potentiel :" << endl;
-    cout << "SANS PRET : Vous aurez "<< allCapitalWithoutPret << " au bout de "<< totalMonth/12 <<" annees et " << totalMonth%12 << " mois\nSoit " << personalInvest << " donnee de votre poche et " << gainsWithoutPret << " d'argent generer, dont " << monthResultWithoutPret << " ce dernier mois !"  << endl;
-    cout << "AVEC PRET : Vous aurez "<< allCapitalWithPret << " au bout de "<< totalMonth/12 <<" annees et " << totalMonth%12 << " mois\nSoit " << personalInvest << " donnee de votre poche et " << gainsWithPret << " d'argent generer, dont " << monthResultWithPret << " ce dernier mois !"  << endl;
+    cout << "SANS PRET : Vous aurez "<< allCapitalWithoutPret << " au bout de "<< totalMonth/12 <<" annees et " << totalMonth%12 << " mois. Soit " << personalInvest << " donnee de votre poche et " << gainsWithoutPret << " d'argent generer, dont " << monthResultWithoutPret << " ce dernier mois !"  << endl;
+    cout << "AVEC PRET : Vous aurez "<< allCapitalWithPret << " au bout de "<< totalMonth/12 <<" annees et " << totalMonth%12 << " mois. Soit " << personalInvest << " donnee de votre poche et " << gainsWithPret << " d'argent generer, dont " << monthResultWithPret << " ce dernier mois !"  << endl;
     cout << "AVEC PRET : Vous aurez payez "<< totalPaid << " au bout de "<< totalMonth/12 <<" annees et " << totalMonth%12 << " mois !" << endl;
     cout << "Avec un pret, vous aurez donc gagnez au total " << allCapitalWithPret-allCapitalWithoutPret << " de plus et aurez un revenu mensuel suplementaire de " << monthResultWithPret-monthResultWithoutPret << endl;
 };
 void DoAllInvest() {
     std::ofstream f{"Invesstissements.txt"};
-    if (f.is_open()) {
+    std::string buffer;
+    buffer.reserve(500'000);
+
+    if (!f.is_open()) return;
         int i = 0;
         for (int m = 1; m <= 100; ++m) {            // 10 000 → 1 000 000
-            double montant = m * 10000.0;
-            for (int t = 2; t <= 16; ++t) {         // 1.0 → 8.0 par 0.5
-                double taux = t * 0.5;
+            const double montant = m * 10000.0;
+            for (int t = 1; t <= 32; ++t) {         // 0.5 → 16.0 par 0.5
+                const double taux = t * 0.5;
                 ++i;
-                std::cout << i << "/1500 " << std::flush;
+                std::cout << i << "/3200 ";
 
-                Invest investF{montant, taux + 7, true};
-                Invest invest{montant, taux + 7, false};
-                f << investF.Info();
-                f << invest.Info();
+                Invest investF{montant, taux, true};
+                Invest invest{montant, taux, false};
+                buffer += investF.Info();
+                buffer += invest.Info();
+            }
+            if (buffer.size() > 200'000) {
+                f << buffer;
+                buffer.clear();
             }
         }
-    }
+    f << buffer;
+
 }
 void DoAllPret() {
     std::ofstream f{"Prets.txt"};
-    if (f.is_open()) {
+    std::string buffer;
+    buffer.reserve(2'000'000);
+
+    if (!f.is_open()) return;
         int i = 0;
         for (int m = 1; m <= 100; ++m) {            // 10 000 → 1 000 000
-            double montant = m * 10000.0;
+            const double montant = m * 10000.0;
             for (int t = 2; t <= 16; ++t) {         // 1.0 → 8.0 par 0.5
-                double taux = t * 0.5;
+                const double taux = t * 0.5;
                 ++i;
-                std::cout << i << "/1500 " << std::flush;
+                std::cout << i << "/1500 ";
+
                 for (int mp = 1; mp <= 100; ++mp) { // 100 → 10 000
-                    double monthPaid = mp * 100.0;
-                    if (monthPaid >= montant || monthPaid <= montant * ((taux/100.0)/12)) break;
+                    const double monthPaid = mp * 100.0;
                     Pret pret2{montant, taux, 0, monthPaid};
-                    f << pret2.Info();
+                    buffer += pret2.Info();
                 }
                 for (int monthOfSimulation = 12; monthOfSimulation <= 300; monthOfSimulation += 12) {
-                    if ((montant * (taux/100/12 / (1 - pow(1 + taux/100/12, -monthOfSimulation)))) < 10) break;
                     Pret pret1{montant, taux, monthOfSimulation};
-                    f << pret1.Info();
+                    buffer += pret1.Info();
+                }
+                if (buffer.size() > 1'000'000) {
+                    f << buffer;
+                    buffer.clear();
                 }
             }
         }
-    }
+    f << buffer;
 }
-void DoAllSimulationWithDefered() {
+void DoAllPretWithDefered() {
     std::ofstream f{"PretsAvecDiferer.txt"};
-    if (f.is_open()) {
+    std::string buffer;
+    buffer.reserve(20'000'000);
+
+    if (!f.is_open()) return;
         int i = 0;
         for (int m = 1; m <= 100; ++m) {            // 10 000 → 1 000 000
             double montant = m * 10000.0;
             for (int t = 2; t <= 16; ++t) {         // 1.0 → 8.0 par 0.5
                 double taux = t * 0.5;
                 ++i;
-                std::cout << i << "/1500 " << std::flush;
+                std::cout << i << "/1500 ";
 
                 for (int mp = 1; mp <= 100; ++mp) { // 100 → 10 000
                     double monthPaid = mp * 100.0;
-                    for (int md = 1; md < 120; ++md) {
-                        if (monthPaid >= montant || monthPaid <= montant * ((taux/100.0)/12)) break;
+                    for (int md = 1; md <= 120; ++md) {
                         Pret pret1{montant, taux, 0, monthPaid, md, true};
-                        f << pret1.Info();
                         Pret pret2{montant, taux, 0, monthPaid, md, false};
-                        f << pret2.Info();
+                        buffer += pret1.Info();
+                        buffer += pret2.Info();
                     }
                 }
                 for (int monthOfSimulation = 12; monthOfSimulation <= 300; monthOfSimulation += 12) {
-                    for (int md = 1; md < monthOfSimulation/2; ++md) {
-
-                        double capitalPourMensualite = montant;
-                        double tauxMensuel = taux/100.0/12;
-                        capitalPourMensualite *= pow(1 + tauxMensuel, md);
-                        double monthPaid = capitalPourMensualite * (tauxMensuel / (1 - pow(1 + tauxMensuel, -monthOfSimulation)));
-                        double firstMonth = capitalPourMensualite * tauxMensuel;
-
-                        if (monthPaid < montant * tauxMensuel || monthPaid < 10) break;
+                    for (int md = 1; md <= monthOfSimulation/2; ++md) {
                         Pret pret2{montant, taux, monthOfSimulation, 0, md, false};
-                        f << pret2.Info();
-
-                        if (monthPaid < firstMonth || monthPaid < 10) break;
                         Pret pret1{montant, taux, monthOfSimulation, 0, md, true};
-                        f << pret1.Info();
-
+                        buffer += pret2.Info();
+                        buffer += pret1.Info();
                     }
+                }
+                if (buffer.size() > 5'000'000) {
+                    f << buffer;
+                    buffer.clear();
                 }
             }
         }
-    }
+
+    f << buffer;
 }
 int main()
 {
-    //int monthOfSimulation;
-/*
-    cout << "Entree le nombre de mois de simulation pour invesstissement : ";
-    cin >> monthOfSimulation;
-    Investissement(monthOfSimulation);
 
-    cout << "Entree le nombre de mois de simulation pour pret : ";
-    cin >> monthOfSimulation;
-    PretByMonth(monthOfSimulation);
-
-    cout << "Entree le nombre d'euro rembourser chaque mois pour simulation de pret : ";
-    cin >> monthOfSimulation;
-*/
-    //investWithPret();
+    investWithPret();
     //DoAllInvest();
     //DoAllPret();
-    DoAllSimulationWithDefered();
+    //DoAllPretWithDefered();
 
     return 0;
 }
