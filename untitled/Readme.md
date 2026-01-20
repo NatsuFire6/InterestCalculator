@@ -9,7 +9,7 @@ Il n'y a pas d'accents car ils ne s'affichent pas correctement dans mon terminal
 - modifier comme bon vous semble la fonction main du fichier "interestCalculator.cpp"
 - éxécuter le programme
 
-## pour lancer le projet dans vscode
+## pour lancer le projet dans vscode ou sans IDE
 - Créer un nouveau dossier
 - ouvrer le terminal de ce dossier
 - éxécuter la commande "git clone https://github.com/NatsuFire6/InterestCalculator.git"
