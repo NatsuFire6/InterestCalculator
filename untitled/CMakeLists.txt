@@ -3,6 +3,4 @@ project(untitled)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(untitled interestCalculator.cpp Pret.cpp Invest.cpp
-        FormatNumber.cpp
-        FormatNumber.h)
+add_executable(untitled interestCalculator.cpp Pret.cpp Invest.cpp FormatNumber.cpp)
