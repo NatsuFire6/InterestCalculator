@@ -5,7 +5,6 @@
 #include "Invest.h"
 
 #include <sstream>
-#include <iostream>
 using namespace  std;
 
 Invest::Invest(double montant, double taux, bool flatTaxe, double more, int monthOfSimulation) : Montant(montant), Taux(taux), FlatTaxe(flatTaxe), More(more), Month(monthOfSimulation) {

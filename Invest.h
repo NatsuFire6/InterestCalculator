@@ -1,6 +1,7 @@
 //
 // Created by LA TOUR MSI DU TURFU on 14/01/2026.
 //
+#pragma once
 
 #ifndef UNTITLED_INVEST_H
 #define UNTITLED_INVEST_H

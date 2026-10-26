@@ -1,7 +1,7 @@
 //
 // Created by LA TOUR MSI DU TURFU on 14/01/2026.
 //
-
+#pragma once
 #ifndef C_PRET_H
 #define C_PRET_H
 #include <string>
@@ -27,6 +27,4 @@ class Pret {
         std::string InfoFlux;
 
 };
-
-
 #endif //C_PRET_H

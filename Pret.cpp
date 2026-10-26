@@ -2,12 +2,11 @@
 // Created by LA TOUR MSI DU TURFU on 14/01/2026.
 //
 
-#include "Pret.hpp"
+#include "Pret.h"
 
 #include <sstream>
 #include <cmath>
 #include<algorithm>
-#include <iostream>
 using namespace std;
 
 Pret::Pret(double montant, double taux, int monthOfSimulation, double monthPaid, int monthOfDefered, bool totalDefered) :

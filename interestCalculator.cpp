@@ -1,5 +1,5 @@
-#include "Pret.hpp"
-#include "Invest.h"
+#include "Pret.cpp"
+#include "Invest.cpp"
 
 #include <cmath>
 #include <fstream>
@@ -214,9 +214,9 @@ int main()
     cin >> monthOfSimulation;
 */
     //investWithPret();
-    //DoAllInvest();
+    DoAllInvest();
     //DoAllPret();
-    DoAllSimulationWithDefered();
+    //DoAllSimulationWithDefered();
 
     return 0;
 }
