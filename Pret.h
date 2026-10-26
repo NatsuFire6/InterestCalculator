@@ -2,8 +2,6 @@
 // Created by LA TOUR MSI DU TURFU on 14/01/2026.
 //
 #pragma once
-#ifndef C_PRET_H
-#define C_PRET_H
 #include <string>
 
 class Pret {
@@ -13,9 +11,7 @@ class Pret {
 
         void PretByPaid(double monthPaid);
         void PretByMonth(int monthOfSimulation);
-        void PretDefered(int monthOfDefered);
         std::string Info();
-
 
     private:
         double Montant;
@@ -25,6 +21,4 @@ class Pret {
         double MonthPaid;
         bool TotalDefered;
         std::string InfoFlux;
-
 };
-#endif //C_PRET_H
