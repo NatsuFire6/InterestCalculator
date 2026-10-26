@@ -17,7 +17,7 @@
 - Créer un nouveau dossier
 - ouvrer le terminal de ce dossier
 - éxécuter la commande "git clone https://github.com/NatsuFire6/InterestCalculator.git"
-- éxécuter la commande "cd .\InterestCalculator\untitled\"
+- éxécuter la commande "cd .\InterestCalculator"
 - modifier la fonction main du fichier "interestCalculator.cpp" comme bon vous semble
 - éxécuter la commande "g++ -std=c++20 -Wall -Wextra *.cpp -o prog"
 - éxécuter la commande ".\prog.exe"
