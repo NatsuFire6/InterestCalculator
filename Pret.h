@@ -1,7 +1,6 @@
 //
 // Created by LA TOUR MSI DU TURFU on 14/01/2026.
 //
-
 #ifndef C_PRET_H
 #define C_PRET_H
 #include <string>

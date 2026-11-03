@@ -1,4 +1,4 @@
-#include "Pret.hpp"
+#include "Pret.h"
 #include "Invest.h"
 
 #include <fstream>
@@ -159,7 +159,6 @@ void DoAllInvest() {
                 const double taux = t * 0.5;
                 ++i;
                 std::cout << i << "/3200 ";
-
                 Invest investF{montant, taux, true};
                 Invest invest{montant, taux, false};
                 buffer += investF.Info();
