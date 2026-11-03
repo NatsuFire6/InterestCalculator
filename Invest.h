@@ -5,7 +5,6 @@
 #define UNTITLED_INVEST_H
 #include <string>
 
-
 class Invest {
     public:
         Invest() = delete;
@@ -21,8 +20,5 @@ class Invest {
         double More;
         int Month;
         std::string InfoFlux;
-
 };
-
-
-#endif //UNTITLED_INVEST_H
+#endif

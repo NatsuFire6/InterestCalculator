@@ -14,7 +14,6 @@ class Pret {
         void PretByMonth(int monthOfSimulation);
         std::string Info();
 
-
     private:
         double Montant;
         double Taux;
@@ -23,8 +22,5 @@ class Pret {
         double MonthPaid;
         bool TotalDefered;
         std::string InfoFlux;
-
 };
-
-
-#endif //C_PRET_H
+#endif

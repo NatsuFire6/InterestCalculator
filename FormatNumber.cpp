@@ -1,12 +1,11 @@
 //
 // Created by LA TOUR MSI DU TURFU on 20/01/2026.
 //
-
-#include "FormatNumber.h"
-
+#pragma once
+#include <string>
 #include <iomanip>
 
-std::string formatNumber(double value) {
+std::string FormatNumber(double value) {
     std::stringstream ss;
     ss << std::fixed << std::setprecision(2) << value;
     std::string s = ss.str();

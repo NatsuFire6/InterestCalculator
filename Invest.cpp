@@ -3,7 +3,7 @@
 //
 
 #include "Invest.h"
-#include "FormatNumber.h"
+#include "FormatNumber.cpp"
 
 Invest::Invest(double montant, double taux, bool flatTaxe, double more, int monthOfSimulation) : Montant(montant), Taux(taux), FlatTaxe(flatTaxe), More(more), Month(monthOfSimulation) {
     Invesstissement(Month);
@@ -29,10 +29,10 @@ void Invest::Invesstissement(int monthOfSimulation){
         personalInvest += More;
         allCapital += More;
     }
-    InfoFlux += "\nInvesstissement cree avec les parametres : " + formatNumber(Montant) + " euros, " + formatNumber(Taux) + "% d'interets, " + formatNumber(More) +
-        " euros invesstis en plus chaque mois, " + (FlatTaxe ? "avec flat taxe" : "sans flat taxe")  + "\nAu bout de " + formatNumber(monthOfSimulation/12) + " annees et " +
-        formatNumber(monthOfSimulation%12)+ " mois, Vous aurez " + formatNumber(allCapital) + " euros, Soit " + formatNumber(personalInvest) +
-        " donnee de votre poche et " + formatNumber(gains) + " d'argent generer, dont " + formatNumber(monthResult) + " ce dernier mois !\n";
+    InfoFlux += "\nInvesstissement cree avec les parametres : " + FormatNumber(Montant) + " euros, " + FormatNumber(Taux) + "% d'interets, " + FormatNumber(More) +
+        " euros invesstis en plus chaque mois, " + (FlatTaxe ? "avec flat taxe" : "sans flat taxe")  + "\nAu bout de " + FormatNumber(monthOfSimulation/12) + " annees et " +
+        FormatNumber(monthOfSimulation%12)+ " mois, Vous aurez " + FormatNumber(allCapital) + " euros, Soit " + FormatNumber(personalInvest) +
+        " donnee de votre poche et " + FormatNumber(gains) + " d'argent generer, dont " + FormatNumber(monthResult) + " ce dernier mois !\n";
 
 };
 
