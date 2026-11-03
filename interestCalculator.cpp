@@ -159,10 +159,16 @@ void DoAllInvest() {
                 const double taux = t * 0.5;
                 ++i;
                 std::cout << i << "/3200 ";
-                Invest investF{montant, taux, true};
-                Invest invest{montant, taux, false};
-                buffer += investF.Info();
-                buffer += invest.Info();
+                for (int more = 1; more < 100; ++more) { // 100 → 10 000
+                    const double moreEachMonth = more * 100;
+                    for (int e = 1; e < 60; ++e) // 1 → 60 (5ans)
+                    {
+                        Invest investF{montant, taux, true, moreEachMonth, e};
+                        Invest invest{montant, taux, false, moreEachMonth, e};
+                        buffer += investF.Info();
+                        buffer += invest.Info();
+                    }
+                }
             }
             if (buffer.size() > 200'000) {
                 f << buffer;
@@ -219,7 +225,7 @@ void DoAllPretWithDefered() {
 
                 for (int mp = 1; mp <= 100; ++mp) { // 100 → 10 000
                     double monthPaid = mp * 100.0;
-                    for (int md = 1; md <= 120; ++md) {
+                    for (int md = 1; md <= 120; ++md) { // 1 → 120
                         Pret pret1{montant, taux, 0, monthPaid, md, true};
                         Pret pret2{montant, taux, 0, monthPaid, md, false};
                         buffer += pret1.Info();
@@ -246,8 +252,8 @@ void DoAllPretWithDefered() {
 int main()
 {
 
-    investWithPret();
-    //DoAllInvest();
+    //investWithPret();
+    DoAllInvest();
     //DoAllPret();
     //DoAllPretWithDefered();
 

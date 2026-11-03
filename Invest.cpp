@@ -3,9 +3,9 @@
 //
 
 #include "Invest.h"
-#include "FormatNumber.cpp"
+#include "FormatNumber.h"
 
-Invest::Invest(double montant, double taux, bool flatTaxe, double more, int monthOfSimulation) : Montant(montant), Taux(taux), FlatTaxe(flatTaxe), More(more), Month(monthOfSimulation) {
+Invest::Invest(double montant, double taux, bool flatTaxe, double more, int EachMonthOfEarn, int monthOfSimulation) : Montant(montant), Taux(taux), FlatTaxe(flatTaxe), More(more), EachEarnMonth(EachMonthOfEarn), Month(monthOfSimulation) {
     Invesstissement(Month);
 }
 
@@ -13,13 +13,18 @@ void Invest::Invesstissement(int monthOfSimulation){
     double monthResult = 0.0;
     double allCapital = Montant;
     double gains = 0;
-    double personalInvest = Montant;
-
-    personalInvest = allCapital;
+    double personalInvest = allCapital;
 
     for (int i = 1; i <= monthOfSimulation; i++) {
 
-        monthResult = allCapital * (Taux / 100.0 / 12);
+        if (monthOfSimulation % EachEarnMonth == 0)
+        {
+            monthResult = allCapital * (Taux / 100.0 / 12);
+        }
+        else
+        {
+            monthResult = 0;
+        }
         if (FlatTaxe) monthResult *= 0.7;
         allCapital += monthResult;
         gains += monthResult;
@@ -29,10 +34,10 @@ void Invest::Invesstissement(int monthOfSimulation){
         personalInvest += More;
         allCapital += More;
     }
-    InfoFlux += "\nInvesstissement cree avec les parametres : " + FormatNumber(Montant) + " euros, " + FormatNumber(Taux) + "% d'interets, " + FormatNumber(More) +
-        " euros invesstis en plus chaque mois, " + (FlatTaxe ? "avec flat taxe" : "sans flat taxe")  + "\nAu bout de " + FormatNumber(monthOfSimulation/12) + " annees et " +
-        FormatNumber(monthOfSimulation%12)+ " mois, Vous aurez " + FormatNumber(allCapital) + " euros, Soit " + FormatNumber(personalInvest) +
-        " donnee de votre poche et " + FormatNumber(gains) + " d'argent generer, dont " + FormatNumber(monthResult) + " ce dernier mois !\n";
+    InfoFlux += "\nInvesstissement cree avec les parametres : " + FormatNumberToText(Montant) + " euros, " + FormatNumberToText(Taux) + "% d'interets (percu tous les " + FormatNumberToText(EachEarnMonth) + " mois), " + FormatNumberToText(More) +
+        " euros invesstis en plus chaque mois, " + (FlatTaxe ? "avec flat taxe" : "sans flat taxe")  + "\nAu bout de " + FormatNumberToText(monthOfSimulation/12) + " annees et " +
+        FormatNumberToText(monthOfSimulation%12)+ " mois, Vous aurez " + FormatNumberToText(allCapital) + " euros, Soit " + FormatNumberToText(personalInvest) +
+        " donnee de votre poche et " + FormatNumberToText(gains) + " d'argent generer, dont " + FormatNumberToText(monthResult) + " ce dernier mois !\n";
 
 };
 

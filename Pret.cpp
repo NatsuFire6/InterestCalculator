@@ -44,13 +44,13 @@ void Pret::PretByMonth(int monthOfSimulation) {
         //ss << "Vous aurez payez "<< totalPaid << " au bout de "<< i/12 <<" annees et " << i%12 << " mois, dont " << monthPaid << " ce mois ! Il ne vous reste plus que " << restToPaid << " a payer !" << endl;
     }
     InfoFlux +=
-            "\nPret cree avec les parametres : " + FormatNumber(Montant) + " euros, " +
-            FormatNumber(Taux) + "% d'interets, sur " + FormatNumber(monthOfSimulation) + " mois" +
+            "\nPret cree avec les parametres : " + FormatNumberToText(Montant) + " euros, " +
+            FormatNumberToText(Taux) + "% d'interets, sur " + FormatNumberToText(monthOfSimulation) + " mois" +
             (MonthOfDefered != 0 ? (", avec un difere " + std::string(TotalDefered ? "total " : "") +
-            "de " + FormatNumber(MonthOfDefered) + " mois") : "") +
-            " !\nAu bout de " + FormatNumber((monthOfSimulation + MonthOfDefered) / 12) + " annees et " +
-            FormatNumber((monthOfSimulation + MonthOfDefered) % 12) + " mois, Vous aurez payez " +
-            FormatNumber(totalPaid) + " euros au total, dont " + FormatNumber(monthPaid) + " ce dernier mois !\n";
+            "de " + FormatNumberToText(MonthOfDefered) + " mois") : "") +
+            " !\nAu bout de " + FormatNumberToText((monthOfSimulation + MonthOfDefered) / 12) + " annees et " +
+            FormatNumberToText((monthOfSimulation + MonthOfDefered) % 12) + " mois, Vous aurez payez " +
+            FormatNumberToText(totalPaid) + " euros au total, dont " + FormatNumberToText(monthPaid) + " ce dernier mois !\n";
 }
 void Pret::PretByPaid(double monthPaid) {
     int monthOfSimulation = 0;
@@ -82,13 +82,13 @@ void Pret::PretByPaid(double monthPaid) {
         //ss << "Vous aurez payez "<< totalPaid << " au bout de "<< i/12 <<" annees et " << i%12 << " mois, dont " << monthPaid << " ce mois ! Il ne vous reste plus que " << restToPaid << " a payer !" << endl;
     }
     InfoFlux +=
-            "\nPret cree avec les parametres : " + FormatNumber(Montant) + " euros, " +
-            FormatNumber(Taux) + "% d'interets, avec un remboursement de " + FormatNumber(monthPaid) + " par mois" +
+            "\nPret cree avec les parametres : " + FormatNumberToText(Montant) + " euros, " +
+            FormatNumberToText(Taux) + "% d'interets, avec un remboursement de " + FormatNumberToText(monthPaid) + " par mois" +
             (MonthOfDefered != 0 ? (", avec un difere " + std::string(TotalDefered ? "total " : "") +
-            "de " + FormatNumber(MonthOfDefered) + " mois") : "") +
-            " !\nAu bout de " + FormatNumber((monthOfSimulation + MonthOfDefered) / 12) + " annees et " +
-            FormatNumber((monthOfSimulation + MonthOfDefered) % 12) + " mois, Vous aurez payez " +
-            FormatNumber(totalPaid) + " euros au total, dont " + FormatNumber(std::min(monthPaid, totalPaid)) + " ce dernier mois !\n";
+            "de " + FormatNumberToText(MonthOfDefered) + " mois") : "") +
+            " !\nAu bout de " + FormatNumberToText((monthOfSimulation + MonthOfDefered) / 12) + " annees et " +
+            FormatNumberToText((monthOfSimulation + MonthOfDefered) % 12) + " mois, Vous aurez payez " +
+            FormatNumberToText(totalPaid) + " euros au total, dont " + FormatNumberToText(std::min(monthPaid, totalPaid)) + " ce dernier mois !\n";
 }
 std::string Pret::Info() {
     return InfoFlux;

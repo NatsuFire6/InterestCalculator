@@ -5,6 +5,6 @@
 #pragma once
 #include <string>
 
-std::string FormatNumber(double value);
+std::string FormatNumberToText(double value);
 
 

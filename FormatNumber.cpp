@@ -1,11 +1,10 @@
 //
 // Created by LA TOUR MSI DU TURFU on 20/01/2026.
 //
-#pragma once
 #include <string>
 #include <iomanip>
 
-std::string FormatNumber(double value) {
+std::string FormatNumberToText(double value) {
     std::stringstream ss;
     ss << std::fixed << std::setprecision(2) << value;
     std::string s = ss.str();
