@@ -82,7 +82,7 @@ void InvestAndPret::AskParam()
 
 void InvestAndPret::DoSimulation()
 {
-    / initialisation des capitaux avec ou sans prêt
+    // initialisation des capitaux avec ou sans prêt
     allCapitalWithPret = personalInvest + pret;
     allCapitalWithoutPret = personalInvest;
     // initialisation du reste à payer avec déjà : un mois d'intérêts généré
