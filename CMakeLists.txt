@@ -8,4 +8,5 @@ add_executable(InterestCalculator
         Invest.cpp
         Pret.cpp
         FormatNumber.cpp
+        InvestAndPret.cpp
 )

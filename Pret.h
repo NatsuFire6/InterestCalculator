@@ -14,6 +14,8 @@ class Pret {
         void PretByMonth(int monthOfSimulation);
         std::string Info();
 
+        static void DoAllPret();
+        static void DoAllPretWithDefered();
     private:
         double Montant;
         double Taux;

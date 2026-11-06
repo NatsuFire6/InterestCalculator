@@ -12,6 +12,7 @@ class Invest {
 
         void Invesstissement(int monthOfSimulation);
         std::string Info();
+        static void DoAllInvest();
 
     private:
         double Montant;

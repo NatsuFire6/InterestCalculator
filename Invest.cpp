@@ -5,7 +5,11 @@
 #include "Invest.h"
 #include "FormatNumber.h"
 
-Invest::Invest(double montant, double taux, bool flatTaxe, double more, int EachMonthOfEarn, int monthOfSimulation) : Montant(montant), Taux(taux), FlatTaxe(flatTaxe), More(more), EachEarnMonth(EachMonthOfEarn), Month(monthOfSimulation) {
+#include <iostream>
+#include <fstream>
+
+Invest::Invest(double montant, double taux, bool flatTaxe, double more, int EachMonthOfEarn, int monthOfSimulation) : Montant(montant), Taux(taux), FlatTaxe(flatTaxe), More(more), EachEarnMonth(EachMonthOfEarn), Month(monthOfSimulation)
+{
     Invesstissement(Month);
 }
 
@@ -41,6 +45,39 @@ void Invest::Invesstissement(int monthOfSimulation){
 
 };
 
-std::string Invest::Info() {
+std::string Invest::Info()
+{
     return InfoFlux;
+}
+
+void Invest::DoAllInvest() {
+    std::ofstream f{"Invesstissements.txt"};
+    std::string buffer;
+    buffer.reserve(500'000);
+
+    if (!f.is_open()) return;
+    int i = 0;
+    for (int m = 1; m <= 100; ++m) {            // 10 000 → 1 000 000 par 10 000
+        const double montant = m * 10000.0;
+        for (int t = 1; t <= 32; ++t) {         // 0.5 → 16.0 par 0.5
+            const double taux = t * 0.5;
+            ++i;
+            std::cout << i << "/3200 ";
+            for (int more = 1; more < 1000; ++more) { // 100 → 100 000 par 100
+                const double moreEachMonth = more * 100;
+                for (int e = 1; e < 60; ++e) // 1 → 60 (5ans)
+                {
+                    Invest investF{montant, taux, true, moreEachMonth, e};
+                    Invest invest{montant, taux, false, moreEachMonth, e};
+                    buffer += investF.Info();
+                    buffer += invest.Info();
+                }
+            }
+        }
+        if (buffer.size() > 200'000) {
+            f << buffer;
+            buffer.clear();
+        }
+    }
+    f << buffer;
 }
