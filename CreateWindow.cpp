@@ -97,15 +97,6 @@ void CreateWindow::WindowsLife(GLFWwindow* window)
         // ============================================
         // Interface ImGui
         // ============================================
-
-        // [] est pour la capture des variables externes
-        // () est pour l'entrée des paramètres
-        // "-> void" est pour le type de retour
-        // ex : "auto incremente = [&](int compteur) -> int"
-
-        // "auto func = []() -> void" est équivalent à "auto func = []"
-        auto func = []
-        {
             ImGui::Begin("Ma premiere fenetre");
             ImGui::Text("Bonjour depuis Dear ImGui !");
             static int compteur = 0;
@@ -120,8 +111,6 @@ void CreateWindow::WindowsLife(GLFWwindow* window)
             ImVec4 color {0.5,0.5,1,1};
             ImGui::TextColored(color,inv.Info().c_str());
             ImGui::End();
-        };
-        WindowsLife(window, func);
         DoRender(window);
     }
 }
