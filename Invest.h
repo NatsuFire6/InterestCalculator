@@ -10,7 +10,6 @@ class Invest {
         Invest() = delete;
         Invest(double montant, double taux, bool flatTaxe = true, double moreEachMonth = 0, int EachMonthOfEarn = 1, int month = 120);
 
-        void Invesstissement(int monthOfSimulation);
         std::string Info();
         static void DoAllInvest();
 
@@ -22,5 +21,8 @@ class Invest {
         int EachEarnMonth;
         int Month;
         std::string InfoFlux;
+
+        void Invesstissement(int monthOfSimulation);
+
 };
 #endif

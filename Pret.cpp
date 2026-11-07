@@ -46,11 +46,11 @@ void Pret::PretByMonth(int monthOfSimulation) {
         //ss << "Vous aurez payez "<< totalPaid << " au bout de "<< i/12 <<" annees et " << i%12 << " mois, dont " << monthPaid << " ce mois ! Il ne vous reste plus que " << restToPaid << " a payer !" << endl;
     }
     InfoFlux +=
-            "\nPret cree avec les parametres : " + FormatNumberToText(Montant) + " euros, " +
-            FormatNumberToText(Taux) + "% d'interets, sur " + FormatNumberToText(monthOfSimulation) + " mois" +
-            (MonthOfDefered != 0 ? (", avec un difere " + std::string(TotalDefered ? "total " : "") +
+            "\nPrêt créé avec les paramètres : " + FormatNumberToText(Montant) + " euros, " +
+            FormatNumberToText(Taux) + "% d'intérêts, sur " + FormatNumberToText(monthOfSimulation) + " mois" +
+            (MonthOfDefered != 0 ? (", avec un diféré " + std::string(TotalDefered ? "total " : "") +
             "de " + FormatNumberToText(MonthOfDefered) + " mois") : "") +
-            " !\nAu bout de " + FormatNumberToText((monthOfSimulation + MonthOfDefered) / 12) + " annees et " +
+            " !\nAu bout de " + FormatNumberToText((monthOfSimulation + MonthOfDefered) / 12) + " années et " +
             FormatNumberToText((monthOfSimulation + MonthOfDefered) % 12) + " mois, Vous aurez payez " +
             FormatNumberToText(totalPaid) + " euros au total, dont " + FormatNumberToText(monthPaid) + " ce dernier mois !\n";
 }
@@ -84,11 +84,11 @@ void Pret::PretByPaid(double monthPaid) {
         //ss << "Vous aurez payez "<< totalPaid << " au bout de "<< i/12 <<" annees et " << i%12 << " mois, dont " << monthPaid << " ce mois ! Il ne vous reste plus que " << restToPaid << " a payer !" << endl;
     }
     InfoFlux +=
-            "\nPret cree avec les parametres : " + FormatNumberToText(Montant) + " euros, " +
-            FormatNumberToText(Taux) + "% d'interets, avec un remboursement de " + FormatNumberToText(monthPaid) + " par mois" +
-            (MonthOfDefered != 0 ? (", avec un difere " + std::string(TotalDefered ? "total " : "") +
+            "\nPrêt créé avec les paramètres : " + FormatNumberToText(Montant) + " euros, " +
+            FormatNumberToText(Taux) + "% d'intérêts, avec un remboursement de " + FormatNumberToText(monthPaid) + " par mois" +
+            (MonthOfDefered != 0 ? (", avec un différé " + std::string(TotalDefered ? "total " : "") +
             "de " + FormatNumberToText(MonthOfDefered) + " mois") : "") +
-            " !\nAu bout de " + FormatNumberToText((monthOfSimulation + MonthOfDefered) / 12) + " annees et " +
+            " !\nAu bout de " + FormatNumberToText((monthOfSimulation + MonthOfDefered) / 12) + " années et " +
             FormatNumberToText((monthOfSimulation + MonthOfDefered) % 12) + " mois, Vous aurez payez " +
             FormatNumberToText(totalPaid) + " euros au total, dont " + FormatNumberToText(std::min(monthPaid, totalPaid)) + " ce dernier mois !\n";
 }

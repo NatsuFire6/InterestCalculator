@@ -10,8 +10,6 @@ class Pret {
         Pret() = delete;
         Pret(double montant, double taux, int monthOfSimulation = 0, double monthPaid = 0, int monthOfDefered = 0, bool totalDefered = true);
 
-        void PretByPaid(double monthPaid);
-        void PretByMonth(int monthOfSimulation);
         std::string Info();
 
         static void DoAllPret();
@@ -24,5 +22,8 @@ class Pret {
         double MonthPaid;
         bool TotalDefered;
         std::string InfoFlux;
+
+        void PretByPaid(double monthPaid);
+        void PretByMonth(int monthOfSimulation);
 };
 #endif

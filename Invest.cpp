@@ -38,10 +38,10 @@ void Invest::Invesstissement(int monthOfSimulation){
         personalInvest += More;
         allCapital += More;
     }
-    InfoFlux += "\nInvesstissement cree avec les parametres : " + FormatNumberToText(Montant) + " euros, " + FormatNumberToText(Taux) + "% d'interets (percu tous les " + FormatNumberToText(EachEarnMonth) + " mois), " + FormatNumberToText(More) +
-        " euros invesstis en plus chaque mois, " + (FlatTaxe ? "avec flat taxe" : "sans flat taxe")  + "\nAu bout de " + FormatNumberToText(monthOfSimulation/12) + " annees et " +
+    InfoFlux += "\nInvestissement créé avec les paramètres : " + FormatNumberToText(Montant) + " euros, " + FormatNumberToText(Taux) + "% d'intérêts (perçu tous les " + FormatNumberToText(EachEarnMonth) + " mois), " + FormatNumberToText(More) +
+        " euros investis en plus chaque mois, " + (FlatTaxe ? "avec flat taxe" : "sans flat taxe")  + " !\nAu bout de " + FormatNumberToText(monthOfSimulation/12) + " années et " +
         FormatNumberToText(monthOfSimulation%12)+ " mois, Vous aurez " + FormatNumberToText(allCapital) + " euros, Soit " + FormatNumberToText(personalInvest) +
-        " donnee de votre poche et " + FormatNumberToText(gains) + " d'argent generer, dont " + FormatNumberToText(monthResult) + " ce dernier mois !\n";
+        " donnée de votre poche et " + FormatNumberToText(gains) + " d'argent généré, dont " + FormatNumberToText(monthResult) + " ce dernier mois !\n";
 
 };
 
