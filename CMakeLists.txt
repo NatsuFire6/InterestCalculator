@@ -73,6 +73,7 @@ add_executable(InterestCalculator
         FormatNumber.cpp
         InvestAndPret.cpp
         CreateWindow.cpp
+        imguiCustom.cpp
 )
 target_link_libraries(InterestCalculator PRIVATE
         imgui

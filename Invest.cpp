@@ -7,41 +7,54 @@
 
 #include <iostream>
 #include <fstream>
+#include <cmath>
 
-Invest::Invest(double montant, double taux, bool flatTaxe, double more, int EachMonthOfEarn, int monthOfSimulation) : Montant(montant), Taux(taux), FlatTaxe(flatTaxe), More(more), EachEarnMonth(EachMonthOfEarn), Month(monthOfSimulation)
+Invest::Invest(double montant, double taux, bool flatTaxe, double more, double eachMonthOfMore, double eachMonthOfEarn, double monthOfSimulation)
+: Montant(montant), Taux(taux), FlatTaxe(flatTaxe), More(more), EachMonthOfMore(eachMonthOfMore), EachEarnMonth(eachMonthOfEarn), Month(monthOfSimulation)
 {
     Invesstissement(Month);
 }
 
-void Invest::Invesstissement(int monthOfSimulation){
+void Invest::Invesstissement(double monthOfSimulation){
     double monthResult = 0.0;
+    double bestMonthResult = 0.0;
     double allCapital = Montant;
     double gains = 0;
     double personalInvest = allCapital;
 
     for (int i = 1; i <= monthOfSimulation; i++) {
 
-        if (monthOfSimulation % EachEarnMonth == 0)
+        //InfoFlux += "std::fmod("+FormatNumberToText(i)+", "+FormatNumberToText(EachEarnMonth)+") = " + std::to_string(std::fmod(i, EachEarnMonth)) +"\n";
+        if (std::fmod(i, EachEarnMonth) == 0)
         {
-            monthResult = allCapital * (Taux / 100.0 / 12);
+            monthResult = allCapital * (Taux / 100.0 / (12 / EachEarnMonth));
         }
         else
         {
             monthResult = 0;
         }
         if (FlatTaxe) monthResult *= 0.7;
+        if(monthResult > bestMonthResult) bestMonthResult = monthResult;
         allCapital += monthResult;
         gains += monthResult;
 
         //ss << "Vous aurez "<< allCapital << " au bout de "<< i/12 <<" annees et " << i%12 << " mois, soit " << personalInvest << " donnee de votre poche et " << gains << " d'argent generer, dont " << monthresult << " ce mois !"  << endl;
 
-        personalInvest += More;
-        allCapital += More;
+        if (std::fmod(i, EachMonthOfMore) == 0)
+        {
+            personalInvest += More;
+            allCapital += More;
+        }
     }
-    InfoFlux += "\nInvestissement créé avec les paramètres : " + FormatNumberToText(Montant) + " euros, " + FormatNumberToText(Taux) + "% d'intérêts (perçu tous les " + FormatNumberToText(EachEarnMonth) + " mois), " + FormatNumberToText(More) +
-        " euros investis en plus chaque mois, " + (FlatTaxe ? "avec flat taxe" : "sans flat taxe")  + " !\nAu bout de " + FormatNumberToText(monthOfSimulation/12) + " années et " +
-        FormatNumberToText(monthOfSimulation%12)+ " mois, Vous aurez " + FormatNumberToText(allCapital) + " euros, Soit " + FormatNumberToText(personalInvest) +
-        " donnée de votre poche et " + FormatNumberToText(gains) + " d'argent généré, dont " + FormatNumberToText(monthResult) + " ce dernier mois !\n";
+    InfoFlux += "\nInvestissement créé avec les paramètres : \n "
+        + FormatNumberToText(Montant) + " euros, \n "
+        + FormatNumberToText(Taux) + "%% d'intérêts (perçu tous les " + FormatNumberToText(EachEarnMonth/12, 0) + " ans et " + FormatNumberToText(std::fmod(EachEarnMonth,12))+ " mois), \n "
+        + FormatNumberToText(More) + " euros investis en plus chaque " + FormatNumberToText(EachMonthOfMore/12, 0) + " ans et " + FormatNumberToText(std::fmod(EachMonthOfMore,12))+ " mois, \n "
+        + (FlatTaxe ? "avec flat taxe" : "sans flat taxe")  + " !"
+        + "\nAu bout de " + FormatNumberToText(monthOfSimulation/12, 0) + " ans et " + FormatNumberToText(std::fmod(monthOfSimulation,12))+ " mois, \n "
+        + "Vous aurez " + FormatNumberToText(allCapital) + " euros, \n "
+        + "Soit " + FormatNumberToText(personalInvest) + " donnée de votre poche et " + FormatNumberToText(gains) + " d'argent généré, \n "
+        + "dont " + FormatNumberToText(monthResult) + " ce dernier mois, votre meilleur mois à généré " + FormatNumberToText(bestMonthResult) + " !\n";
 
 };
 
@@ -65,7 +78,7 @@ void Invest::DoAllInvest() {
             std::cout << i << "/3200 ";
             for (int more = 1; more < 1000; ++more) { // 100 → 100 000 par 100
                 const double moreEachMonth = more * 100;
-                for (int e = 1; e < 60; ++e) // 1 → 60 (5ans)
+                for (double e = 1; e < 60; e+=1) // 1 → 60 (5ans)
                 {
                     Invest investF{montant, taux, true, moreEachMonth, e};
                     Invest invest{montant, taux, false, moreEachMonth, e};

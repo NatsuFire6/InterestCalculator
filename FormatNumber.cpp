@@ -4,9 +4,9 @@
 #include <string>
 #include <iomanip>
 
-std::string FormatNumberToText(double value) {
+std::string FormatNumberToText(double value, int precision) {
     std::stringstream ss;
-    ss << std::fixed << std::setprecision(2) << value;
+    ss << std::fixed << std::setprecision(precision) << value;
     std::string s = ss.str();
 
     size_t dotPos = s.find('.');

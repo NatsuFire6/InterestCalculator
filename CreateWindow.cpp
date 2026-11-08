@@ -97,31 +97,69 @@ void CreateWindow::WindowsLife(GLFWwindow* window)
         // ============================================
         // Interface ImGui
         // ============================================
-            ImGui::Begin("Ma premiere fenetre");
-            ImGui::Text("Bonjour depuis Dear ImGui !");
-            static int compteur = 0;
-            if (ImGui::Button("Cliquer ici"))
-            {
-                compteur++;
-            }
-            ImGui::Text("Compteur : %d", compteur);
+
+        // Démonstration officielle de Dear ImGui
+        static bool showDemo = true;
+        if (showDemo) ImGui::ShowDemoWindow(&showDemo);
+        // Fenêtre des statistiques et métriques
+        static bool showMetrics = false;
+        if (showMetrics) ImGui::ShowMetricsWindow(&showMetrics);
+        // Fenêtre d'informations sur ImGui
+        static bool showAbout = false;
+        if (showAbout) ImGui::ShowAboutWindow(&showAbout);
+        // Fenêtre de débogage du style
+        static bool showStyleEditor = false;
+        if (showStyleEditor)
+        {
+            ImGui::Begin("Style Editor");
+            ImGui::ShowStyleEditor();
             ImGui::End();
-            ImGui::Begin("Ma deuxième fenetre");
-            Invest inv {10000,5,false,100};
-            ImVec4 color {0.5,0.5,1,1};
-            ImGui::TextColored(color,inv.Info().c_str());
-            ImGui::End();
+        }
+        // ============================================
+        // Menu de contrôle
+        // ============================================
+        ImGui::Begin("ImGui Test Launcher");
+        ImGui::Text("Outils de demonstration");
+        ImGui::Separator();
+        ImGui::Checkbox("Demo Window", &showDemo);
+        ImGui::Checkbox("Metrics Window", &showMetrics);
+        ImGui::Checkbox("About Window", &showAbout);
+        ImGui::Checkbox("Style Editor", &showStyleEditor);
+        ImGui::End();
+
+        // ============================================
+        // Interface ImGui
+        // ============================================
+        /*static int compteur = 0;
+
+        ImGui::Begin("Ceci est une fenêtre de test appelé par la fonction de test 'Start'");
+        ImGui::TextColored({1,0.5,0.5,1},"Je sers à montrer à quoi ressemble les fonctions de ImGui.");
+
+        if (ImGui::Button("Je suis un bouton"))
+        {
+            compteur++;
+        }
+        ImGui::BulletText("Compteur : %d", compteur);
+        ImGui::Text("Je suis du text");
+        ImVec4 color {0.5,0.5,1,1};
+        ImGui::TextColored(color,"Je suis du text colorer.");
+        constexpr char* const items[] = {"élément 0", "élément 1"};
+        ImGui::ListBox("Je suis une listBox",0,items,3);
+
+
+        ImGui::End();*/
         DoRender(window);
     }
 }
-void CreateWindow::WindowsLife(GLFWwindow* window, const std::function<void()>& f)
+void CreateWindow::WindowsLife(GLFWwindow* window, const std::function<void()>& fLife, const std::function<void()>& fDead)
 {
     while (!glfwWindowShouldClose(window))
     {
         DoNewFrame();
-        f();
+        fLife();
         DoRender(window);
     }
+    fDead();
 }
 void CreateWindow::CleanWindows(GLFWwindow* window)
 {
@@ -141,10 +179,10 @@ void CreateWindow::Start()
     WindowsLife(window);
     CleanWindows(window);
 }
-void CreateWindow::Start(const std::function<void()>& f)
+void CreateWindow::Start(const std::function<void()>& fLife, const std::function<void()>& fDead)
 {
     GLFWwindow* window = InitGLFW();
     InitImGui(window);
-    WindowsLife(window, f);
+    WindowsLife(window, fLife, fDead);
     CleanWindows(window);
 }

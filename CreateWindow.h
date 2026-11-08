@@ -13,14 +13,14 @@ class CreateWindow
 {
 public :
     static void Start();
-    static void Start(const std::function<void()>&);
+    static void Start(const std::function<void()>& fLife, const std::function<void()>& fDead = nullptr);
 private:
     static GLFWwindow* InitGLFW();
     static void InitImGui(GLFWwindow*);
     static void DoRender(GLFWwindow*);
     static void DoNewFrame();
     static void WindowsLife(GLFWwindow*);
-    static void WindowsLife(GLFWwindow*, const std::function<void()>&);
+    static void WindowsLife(GLFWwindow*, const std::function<void()>& fLife, const std::function<void()>& fDead = nullptr);
     static void CleanWindows(GLFWwindow*);
 };
 
