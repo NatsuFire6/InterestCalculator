@@ -4,11 +4,13 @@
 #ifndef UNTITLED_INVEST_H
 #define UNTITLED_INVEST_H
 #include <string>
+#include <unordered_map>
+#include <vector>
 
 class Invest {
     public:
         Invest() = delete;
-        Invest(double montant, double taux, bool flatTaxe = true, double moreEachMonth = 0, double eachMonthOfMore = 0, double eachMonthOfEarn = 1, double month = 120);
+        Invest(double montant, double taux, bool flatTaxe = true, std::vector<std::pair<double, double>> eachMonthOfMore = {{1,0}}, std::vector<double> eachMonthOfEarn = {1}, double month = 120);
 
         std::string Info();
         static void DoAllInvest();
@@ -17,9 +19,8 @@ class Invest {
         double Montant;
         double Taux;
         bool FlatTaxe;
-        double More;
-        double EachMonthOfMore;
-        double EachEarnMonth;
+        std::vector<std::pair<double, double>> EachMonthOfMore;
+        std::vector<double> EachEarnMonth;
         double Month;
         std::string InfoFlux;
 

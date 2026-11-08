@@ -9,8 +9,8 @@
 #include <fstream>
 #include <cmath>
 
-Invest::Invest(double montant, double taux, bool flatTaxe, double more, double eachMonthOfMore, double eachMonthOfEarn, double monthOfSimulation)
-: Montant(montant), Taux(taux), FlatTaxe(flatTaxe), More(more), EachMonthOfMore(eachMonthOfMore), EachEarnMonth(eachMonthOfEarn), Month(monthOfSimulation)
+Invest::Invest(double montant, double taux, bool flatTaxe, std::vector<std::pair<double, double>> eachMonthOfMore, std::vector<double> eachMonthOfEarn, double monthOfSimulation)
+: Montant(montant), Taux(taux), FlatTaxe(flatTaxe), EachMonthOfMore(eachMonthOfMore), EachEarnMonth(eachMonthOfEarn), Month(monthOfSimulation)
 {
     Invesstissement(Month);
 }
@@ -24,37 +24,50 @@ void Invest::Invesstissement(double monthOfSimulation){
 
     for (int i = 1; i <= monthOfSimulation; i++) {
 
-        //InfoFlux += "std::fmod("+FormatNumberToText(i)+", "+FormatNumberToText(EachEarnMonth)+") = " + std::to_string(std::fmod(i, EachEarnMonth)) +"\n";
-        if (std::fmod(i, EachEarnMonth) == 0)
-        {
-            monthResult = allCapital * (Taux / 100.0 / (12 / EachEarnMonth));
-        }
-        else
-        {
-            monthResult = 0;
-        }
-        if (FlatTaxe) monthResult *= 0.7;
-        if(monthResult > bestMonthResult) bestMonthResult = monthResult;
-        allCapital += monthResult;
-        gains += monthResult;
+        //InfoFlux += "std::fmod("+FormatNumberToTextString(i)+", "+FormatNumberToTextString(EachEarnMonth)+") = " + std::to_string(std::fmod(i, EachEarnMonth)) +"\n";
 
+        for (double monthOfEarn : EachEarnMonth)
+        {
+            if (std::fmod(i, monthOfEarn) == 0)
+            {
+                monthResult = allCapital * (Taux / 100.0 / (12 / monthOfEarn));
+            }
+            else
+            {
+                monthResult = 0;
+            }
+            if (FlatTaxe) monthResult *= 0.7;
+            if(monthResult > bestMonthResult) bestMonthResult = monthResult;
+            allCapital += monthResult;
+            gains += monthResult;
+        }
         //ss << "Vous aurez "<< allCapital << " au bout de "<< i/12 <<" annees et " << i%12 << " mois, soit " << personalInvest << " donnee de votre poche et " << gains << " d'argent generer, dont " << monthresult << " ce mois !"  << endl;
-
-        if (std::fmod(i, EachMonthOfMore) == 0)
+        for (auto MonthAndMore : EachMonthOfMore)
         {
-            personalInvest += More;
-            allCapital += More;
+            if (std::fmod(i, MonthAndMore.first) == 0)
+            {
+                personalInvest += MonthAndMore.second;
+                allCapital += MonthAndMore.second;
+            }
         }
     }
     InfoFlux += "\nInvestissement créé avec les paramètres : \n "
-        + FormatNumberToText(Montant) + " euros, \n "
-        + FormatNumberToText(Taux) + "%% d'intérêts (perçu tous les " + FormatNumberToText(EachEarnMonth/12, 0) + " ans et " + FormatNumberToText(std::fmod(EachEarnMonth,12))+ " mois), \n "
-        + FormatNumberToText(More) + " euros investis en plus chaque " + FormatNumberToText(EachMonthOfMore/12, 0) + " ans et " + FormatNumberToText(std::fmod(EachMonthOfMore,12))+ " mois, \n "
-        + (FlatTaxe ? "avec flat taxe" : "sans flat taxe")  + " !"
-        + "\nAu bout de " + FormatNumberToText(monthOfSimulation/12, 0) + " ans et " + FormatNumberToText(std::fmod(monthOfSimulation,12))+ " mois, \n "
-        + "Vous aurez " + FormatNumberToText(allCapital) + " euros, \n "
-        + "Soit " + FormatNumberToText(personalInvest) + " donnée de votre poche et " + FormatNumberToText(gains) + " d'argent généré, \n "
-        + "dont " + FormatNumberToText(monthResult) + " ce dernier mois, votre meilleur mois à généré " + FormatNumberToText(bestMonthResult) + " !\n";
+        + FormatNumberToTextString(Montant) + " euros, \n "
+        + FormatNumberToTextString(Taux) + "%% d'intérêts perçu tous les : \n ";
+    for (double monthOfEarn : EachEarnMonth)
+    {
+        InfoFlux += " " + FormatDuration(TimeUnit::Month, monthOfEarn) + ", \n ";
+    }
+    for (auto MonthAndMore : EachMonthOfMore)
+    {
+        InfoFlux += FormatNumberToTextString(MonthAndMore.second) + " euros investis en plus chaque " + FormatDuration(TimeUnit::Month, MonthAndMore.first)+ ", \n ";
+
+    }
+    InfoFlux += std::string(FlatTaxe ? "avec flat taxe" : "sans flat taxe") + " !"
+        + "\nAu bout de " + FormatDuration(TimeUnit::Month, monthOfSimulation) + ", \n "
+        + "Vous aurez " + FormatNumberToTextString(allCapital) + " euros, \n "
+        + "Soit " + FormatNumberToTextString(personalInvest) + " donnée de votre poche et " + FormatNumberToTextString(gains) + " d'argent généré, \n "
+        + "dont " + FormatNumberToTextString(monthResult) + " ce dernier mois, votre meilleur mois à généré " + FormatNumberToTextString(bestMonthResult) + " !\n";
 
 };
 
@@ -80,10 +93,10 @@ void Invest::DoAllInvest() {
                 const double moreEachMonth = more * 100;
                 for (double e = 1; e < 60; e+=1) // 1 → 60 (5ans)
                 {
-                    Invest investF{montant, taux, true, moreEachMonth, e};
-                    Invest invest{montant, taux, false, moreEachMonth, e};
-                    buffer += investF.Info();
-                    buffer += invest.Info();
+                    //Invest investF{montant, taux, true, moreEachMonth, e};
+                    //Invest invest{montant, taux, false, moreEachMonth, e};
+                    //buffer += investF.Info();
+                    //buffer += invest.Info();
                 }
             }
         }

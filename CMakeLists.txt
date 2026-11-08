@@ -71,7 +71,6 @@ add_executable(InterestCalculator
         Simulations/Invest.cpp
         Simulations/Pret.cpp
         Simulations/InvestAndPret.cpp
-        WindowUtils/FormatNumber.cpp
         WindowUtils/CreateWindow.cpp
 )
 target_link_libraries(InterestCalculator PRIVATE

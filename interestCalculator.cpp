@@ -20,6 +20,7 @@ int main()
 #include "imgui.h"
 #include "WindowUtils/imguiCustom.h"
 #include "imgui_internal.h"
+#include "WindowUtils/FormatNumber.h"
 
 static void HelpMarker(const char* desc)
 {
@@ -47,6 +48,11 @@ int main()
     // ex : "auto incremente = [&](int compteur) -> int"
 
     // "auto func = []() -> void" est équivalent à "auto func = []"
+    std::cout << FormatDuration(TimeUnit::Year, 2.5) << '\n';
+    std::cout << FormatDuration(TimeUnit::Month, 15) << '\n';
+    std::cout << FormatDuration(TimeUnit::Hour, 1250) << '\n';
+    std::cout << FormatDuration(TimeUnit::Seconde, 125.75) << '\n';
+
     auto func = []
     {
         if (ImGui::Begin("Choose param"))
@@ -104,7 +110,6 @@ int main()
             ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
             ImGui::Text("Progress Bar 3");
 
-
             static double value1 = 50.0;
             static double value2 = 50.0;
             static double value3 = 50.0;
@@ -124,51 +129,74 @@ int main()
         ImGui::Begin("Fenêtre de simulation d'investissement");
 
         static double montant = 0, more = 0, eachMonthOfMore = 1, taux = 0, eachMonthOfEarn = 1, monthOfSimu = 1;
-        static int isflattaxe = 0, nbrOfMore = 1, nbrOfEarn = 1;
-         bool IsFlatTaxe = isflattaxe == 1;
+        static int isFlatTaxe = 0, nbrOfMore = 1, nbrOfEarn = 1;
+        bool IsFlatTaxe = isFlatTaxe == 1;
+        static std::vector<std::pair<double, double>> MonthsAndMores{{1,10}};
+        static std::vector<double> MonthsOfEarn{1};
+
         if (ImGui::CollapsingHeader("Paramètres de l'investissement", ImGuiTreeNodeFlags_DefaultOpen))
         {
             ImGui::Text("indiquer le montant de départ");
-            ImGui::DragDouble("##montantDD", &montant, 100., 0., DBL_MAX, "%.2f€", 0., 100., 1000.);
-
-            ImGui::Text("indiquer le taux annuel");
             ImGui::SameLine(); HelpMarker(
                 "Click and drag to edit value.\n"
                 "Hold Shift/Alt for faster/slower edit.\n"
-                "Double-Click or Ctrl+Click to input value.");
+                "Double-Click or Ctrl+Click to input value.\n"
+                "Click or Ctrl+Click on button '+' to incremente/faster_incremente value.\n"
+                "Click or Ctrl+Click on button '-' to decremente/faster_decremente value.");
+            ImGui::DragDouble("##montantDD", &montant, 100., 0., DBL_MAX, "%.2f€", 0., 100., 1000.);
+
+            ImGui::Text("indiquer le taux annuel");
             ImGui::DragDouble("##tauxDD", &taux, 0.1, 0., 100., "%.2f%%", 0., 0.1, 1.);
 
-            ImGui::Text("indiquer le nombre de mois à attendre pour percevoir les revenus");
-            ImGui::SameLine(); HelpMarker(
-                "2 = percu tous les deux mois.\n"
-                "0.5 = percu deux fois par mois.\n"
-                "0.25 = percu toutes les semaines (environ).\n"
-                //"La valeur minimum vous donne de l'argent 31 fois par mois (peu importe le mois)"
-                );
-            ImGui::DragDouble("##eachMonthDD", &eachMonthOfEarn, 1., 1./*/31.*/, DBL_MAX, "%.2f", 0, 1., 12.);
-
-            if (ImGui::CollapsingHeader("Ajout d'argent"))
+            if (ImGui::CollapsingHeader("Gain d'argent", ImGuiChildFlags_Borders))
             {
-                ImGui::InputInt("Nombre d'éléments dans la liste qui suit", &nbrOfMore, 1, 5, ImGuiDataType_U8);
-                ImGui::BeginChild("##child",{0,0}, ImGuiCol_ChildBg | ImGuiChildFlags_Borders);
-                ImGui::Text("Ajouter de l'argent chaque %.2f mois", eachMonthOfMore);
-                ImGui::SameLine(); HelpMarker("1 = ajout d'argent chaque mois.\n"
-                                              "12 = ajout d'argent tous les ans\n"
-                                              //"Si valeur minimum, vous donnez de l'argent 31 fois par mois (peu importe le mois)"
-                                              );
-                ImGui::DragDouble("##monthMoreDD", &eachMonthOfMore, 1., 1./*/31.*/, DBL_MAX, "%.2f", 0, 1., 12.);
+                ImGui::DragDouble("Nombre d'éléments dans la liste qui suit##gain", &nbrOfEarn, 0, 1, 100, nullptr,0, 1, 5);
+                if (MonthsOfEarn.size() < nbrOfEarn) MonthsOfEarn.resize(nbrOfEarn, 1.0); // 1.0 est la data des new elements qui seront créé lors du resize
+                if (MonthsOfEarn.size() > nbrOfEarn) MonthsOfEarn.resize(nbrOfEarn);
+                for (int i = 0; i < nbrOfEarn; ++i)
+                {
+                    ImGui::PushID(i);
+                    ImGui::BeginChild("##childgain",{0,0}, ImGuiChildFlags_Borders | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
 
-                ImGui::Text("Ajouter %.2f€ chaque %.2f mois", more, eachMonthOfMore);
-                ImGui::DragDouble("##moreDD", &more, 1., 0., DBL_MAX, "%.2f€", 0., 100., 1000.);
+                    ImGui::Text("indiquer le nombre de mois à attendre pour percevoir les revenus");
+                    ImGui::SameLine(); HelpMarker(
+                        "1 = percu tous les mois.\n"
+                        "2 = percu tous les deux mois.\n"
+                        "Vous devriez rester en valeur entière.\n");
+                    ImGui::DragDouble("##eachMonthDD", &MonthsOfEarn[i], 1., 1., DBL_MAX, "%.2f", 0, 1., 12.);
 
-                ImGui::EndChild();
+                    ImGui::EndChild();
+                    ImGui::PopID();
+                }
+            }
+            ImGui::Spacing();
+            if (ImGui::CollapsingHeader("Ajout d'argent"), ImGuiChildFlags_Borders)
+            {
+                ImGui::DragDouble("Nombre d'éléments dans la liste qui suit##ajout", &nbrOfMore, 0, 1, 100, nullptr,0, 1, 5);
+                if (MonthsAndMores.size() < nbrOfMore) MonthsAndMores.resize(nbrOfMore, {1.0, 0.0});
+                if (MonthsAndMores.size() > nbrOfMore) MonthsAndMores.resize(nbrOfMore);
+                for (int i = 0; i < nbrOfMore; ++i)
+                {
+                    ImGui::PushID(i);
+                    ImGui::BeginChild("##childajout",{0,0}, ImGuiChildFlags_Borders | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AutoResizeX);
+
+                    ImGui::Text("Ajouter %.2f€ chaque %.2f mois", MonthsAndMores[i].second, MonthsAndMores[i].first);
+                    ImGui::DragDouble("##monthMoreDD", &MonthsAndMores[i].first, 1., 1., DBL_MAX, "%.2f", 0, 1., 12.);
+                    ImGui::SameLine(); HelpMarker("1 = ajout d'argent chaque mois.\n"
+                        "12 = ajout d'argent tous les ans\n"
+                        "Vous devriez rester en valeur entière.\n");
+                    ImGui::DragDouble("##moreDD", &MonthsAndMores[i].second, 1., 0., DBL_MAX, "%.2f€", 0., 100., 1000.);
+
+                    ImGui::EndChild();
+                    ImGui::PopID();
+                }
             }
 
             ImGui::Text("Switch FlatTaxe");
             ImGui::SameLine(); HelpMarker("Si 'True' : 30% de revenu en moins");
             //ImGui::SameLine();
-            const char* FlatTaxeValue = isflattaxe == 1 ? "True" : "False";
-            ImGui::SliderInt("##flatTaxe", &isflattaxe, 0, 1, FlatTaxeValue, ImGuiSliderFlags_NoInput);
+            const char* FlatTaxeValue = isFlatTaxe == 1 ? "True" : "False";
+            ImGui::SliderInt("##flatTaxe", &isFlatTaxe, 0, 1, FlatTaxeValue, ImGuiSliderFlags_NoInput);
 
             ImGui::Text("indiquer le nombre de mois de simulation");
             ImGui::SameLine(); HelpMarker("12 = résultat de la simulation au bout de 1 an.");
@@ -179,7 +207,7 @@ int main()
         static std::string resultString;
         if (ImGui::Button("Faire la simulation !"))
         {
-            Invest inv {montant, taux, IsFlatTaxe, more, eachMonthOfMore, eachMonthOfEarn, monthOfSimu};
+            Invest inv {montant, taux, IsFlatTaxe, MonthsAndMores, MonthsOfEarn, monthOfSimu};
             resultString = inv.Info();
         }
         ImVec4 color {0.5,0.5,1,1};
