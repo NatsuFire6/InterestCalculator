@@ -68,12 +68,11 @@ target_link_libraries(imgui PUBLIC
 
 add_executable(InterestCalculator
         interestCalculator.cpp
-        Invest.cpp
-        Pret.cpp
-        FormatNumber.cpp
-        InvestAndPret.cpp
-        CreateWindow.cpp
-        imguiCustom.cpp
+        Simulations/Invest.cpp
+        Simulations/Pret.cpp
+        Simulations/InvestAndPret.cpp
+        WindowUtils/FormatNumber.cpp
+        WindowUtils/CreateWindow.cpp
 )
 target_link_libraries(InterestCalculator PRIVATE
         imgui

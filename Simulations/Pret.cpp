@@ -3,13 +3,13 @@
 //
 
 #include "Pret.h"
-#include "FormatNumber.h"
+#include "../WindowUtils/FormatNumber.h"
 
-#include <sstream>
-#include <cmath>
 #include <algorithm>
-#include <iostream>
+#include <cmath>
 #include <fstream>
+#include <iostream>
+#include <sstream>
 
 Pret::Pret(double montant, double taux, int monthOfSimulation, double monthPaid, int monthOfDefered, bool totalDefered) :
     Montant(montant), Taux(taux), MonthOfSimulation(monthOfSimulation), MonthPaid(monthPaid), MonthOfDefered(monthOfDefered), TotalDefered(totalDefered)

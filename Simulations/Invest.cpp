@@ -3,7 +3,7 @@
 //
 
 #include "Invest.h"
-#include "FormatNumber.h"
+#include "../WindowUtils/FormatNumber.h"
 
 #include <iostream>
 #include <fstream>

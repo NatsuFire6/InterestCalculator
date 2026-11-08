@@ -1,7 +1,7 @@
-#include "Pret.h"
-#include "Invest.h"
-#include "InvestAndPret.h"
-#include "CreateWindow.h"
+#include "Simulations/Pret.h"
+#include "Simulations/Invest.h"
+#include "Simulations/InvestAndPret.h"
+#include "WindowUtils/CreateWindow.h"
 /*
 int main()
 {
@@ -15,14 +15,10 @@ int main()
     return 0;
 }*/
 
-#include <algorithm>
 #include <iomanip>
 #include <iostream>
-#include <GLFW/glfw3.h>
 #include "imgui.h"
-#include "imguiCustom.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
+#include "WindowUtils/imguiCustom.h"
 #include "imgui_internal.h"
 
 static void HelpMarker(const char* desc)
@@ -42,21 +38,6 @@ bool InputDouble(const char* label, int* v, int step, int step_fast, ImGuiInputT
     const char* format = (flags & ImGuiInputTextFlags_CharsHexadecimal) ? "%08X" : "%d";
     return ImGui::InputScalar(label, ImGuiDataType_Double, (void*)v, (void*)(step > 0 ? &step : NULL), (void*)(step_fast > 0 ? &step_fast : NULL), format, flags);
 }
-bool DragDouble(const char* label, int* v, float v_speed, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
-{
-    return ImGui::DragScalar(label, ImGuiDataType_Double, v, v_speed, &v_min, &v_max, format, flags);
-}
-/*
-double* castFtoD(const float* v)
-{
-    double dVal = *v; // Value conversion, no precision loss
-    return &dVal;        // Pointer to the converted value
-}
-float* castDtoF(const double* v)
-{
-    float fVal = *v; // Value conversion with precision loss
-    return &fVal;       // Pointer to the converted value
-}*/
 int main()
 {
     CreateWindow::Start();
@@ -148,16 +129,14 @@ int main()
         if (ImGui::CollapsingHeader("Paramètres de l'investissement", ImGuiTreeNodeFlags_DefaultOpen))
         {
             ImGui::Text("indiquer le montant de départ");
-            ImGui::DragDouble("##montantDD", &montant, 100, 0, DBL_MAX, "%.2f€", 0, 100, 1000);
-            //ImGui::InputDouble("##montant", &montant, 100, 1000, "%.2f€");
+            ImGui::DragDouble("##montantDD", &montant, 100., 0., DBL_MAX, "%.2f€", 0., 100., 1000.);
 
             ImGui::Text("indiquer le taux annuel");
             ImGui::SameLine(); HelpMarker(
                 "Click and drag to edit value.\n"
                 "Hold Shift/Alt for faster/slower edit.\n"
                 "Double-Click or Ctrl+Click to input value.");
-            ImGui::DragDouble("##tauxDD", &taux, 0.1, 0, 100, "%.2f%%", 0, 0.1, 1);
-            //ImGui::DragFloat("##taux", &taux, 0.5, 0., 100., "%.2f%%", ImGuiSliderFlags_AlwaysClamp);
+            ImGui::DragDouble("##tauxDD", &taux, 0.1, 0., 100., "%.2f%%", 0., 0.1, 1.);
 
             ImGui::Text("indiquer le nombre de mois à attendre pour percevoir les revenus");
             ImGui::SameLine(); HelpMarker(
@@ -166,15 +145,7 @@ int main()
                 "0.25 = percu toutes les semaines (environ).\n"
                 //"La valeur minimum vous donne de l'argent 31 fois par mois (peu importe le mois)"
                 );
-            ImGui::DragDouble("##eachMonthDD", &eachMonthOfEarn, 1, 1./*/31.*/, DBL_MAX, "%.2f", 0, 1, 12);
-            //ImGui::DragFloat("##eachMonth", &eachMonthOfEarn, 1., 1., FLT_MAX, "%.2f", ImGuiSliderFlags_AlwaysClamp);
-
-            /*enum isFlatTaxe { True, False, ElementCount };
-        static int elem = True;
-        const char* elems_names[ElementCount] = { "True", "False" };
-        const char* elem_name = (elem >= 0 && elem < ElementCount) ? elems_names[elem] : "Unknown";
-        ImGui::SliderInt("slider enum", &elem, 0, ElementCount - 1, elem_name); // Use ImGuiSliderFlags_NoInput flag to disable Ctrl+Click here.
-        */
+            ImGui::DragDouble("##eachMonthDD", &eachMonthOfEarn, 1., 1./*/31.*/, DBL_MAX, "%.2f", 0, 1., 12.);
 
             if (ImGui::CollapsingHeader("Ajout d'argent"))
             {
@@ -185,14 +156,11 @@ int main()
                                               "12 = ajout d'argent tous les ans\n"
                                               //"Si valeur minimum, vous donnez de l'argent 31 fois par mois (peu importe le mois)"
                                               );
-                ImGui::DragDouble("##monthMoreDD", &eachMonthOfMore, 1, 1./*/31.*/, DBL_MAX, "%.2f", 0, 1, 12);
-                //ImGui::InputDouble("##monthMore", &eachMonthOfMore, 1, 12, "%.2f");
-                //ImGui::DragFloat("##monthMoref", reinterpret_cast<float*>(&eachMonthOfMore), 1., 0., 0., "%.2f");
+                ImGui::DragDouble("##monthMoreDD", &eachMonthOfMore, 1., 1./*/31.*/, DBL_MAX, "%.2f", 0, 1., 12.);
 
                 ImGui::Text("Ajouter %.2f€ chaque %.2f mois", more, eachMonthOfMore);
-                ImGui::DragDouble("##moreDD", &more, 1, 0, DBL_MAX, "%.2f€", 0, 100, 1000);
-                //ImGui::InputDouble("##more", &more, 100, 1000, "%.2f€");
-                //ImGui::DragFloat("##moref", reinterpret_cast<float*>(&more), 1., 0., 0., "%.2f€");
+                ImGui::DragDouble("##moreDD", &more, 1., 0., DBL_MAX, "%.2f€", 0., 100., 1000.);
+
                 ImGui::EndChild();
             }
 
@@ -204,7 +172,7 @@ int main()
 
             ImGui::Text("indiquer le nombre de mois de simulation");
             ImGui::SameLine(); HelpMarker("12 = résultat de la simulation au bout de 1 an.");
-            ImGui::DragDouble("##monthOfSimuDD", &monthOfSimu, 1, 0, DBL_MAX, "%.2f", 0, 1, 12);
+            ImGui::DragDouble("##monthOfSimuDD", &monthOfSimu, 1., 0., DBL_MAX, "%.2f", 0., 1., 12.);
             //ImGui::DragFloat("##monthOfSimu", &monthOfSimu, 1., 1.0, FLT_MAX, "%.2f", ImGuiSliderFlags_AlwaysClamp);
         }
 

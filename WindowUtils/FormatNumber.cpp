@@ -1,6 +1,8 @@
 //
 // Created by LA TOUR MSI DU TURFU on 20/01/2026.
 //
+
+#include "FormatNumber.h"
 #include <string>
 #include <iomanip>
 
